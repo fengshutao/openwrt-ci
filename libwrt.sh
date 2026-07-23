@@ -12,3 +12,8 @@ git clone --depth=1 https://github.com/gdy666/luci-app-lucky.git package/lucky
 # 移除 openwrt feeds 过时的luci版本
 # rm -rf feeds/luci/applications/luci-app-passwall
 # git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall package/passwall-luci
+
+cd $OPENWRT_PATH
+./scripts/feeds update -a
+./scripts/feeds install -a
+make defconfig
