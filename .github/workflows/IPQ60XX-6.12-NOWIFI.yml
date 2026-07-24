@@ -4,8 +4,8 @@ on:
   workflow_dispatch: # 支持手动在 Actions 页面触发编译
 
 env:
-  REPO_URL: https://github.com/LiBwrt/LibWrt.git
-  REPO_BRANCH: 25.12-nss
+  REPO_URL: https://github.com/LiBwrt/LibWrt
+  REPO_BRANCH: main  # 修正为 main 分支
   TZ: Asia/Shanghai
 
 jobs:
@@ -48,6 +48,9 @@ jobs:
     - name: 注入 .config 配置
       working-directory: ./openwrt
       run: |
+        # 清除可能存在的默认配置，防止串机型
+        rm -f .config*
+        
         cat <<EOF > .config
         # ========================
         # 1. 目标机型: 兆能 M2 (IPQ6018)
@@ -100,18 +103,18 @@ jobs:
         CONFIG_PACKAGE_luci-app-cpufreq=y
         CONFIG_PACKAGE_luci-i18n-cpufreq-zh-cn=y
 
-        # msd_lite (根据用户提供)
+        # msd_lite
         CONFIG_PACKAGE_msd_lite=y
         CONFIG_PACKAGE_luci-app-msd_lite=y
         CONFIG_PACKAGE_luci-i18n-msd_lite-zh-cn=y
 
-        # ttyd (根据用户提供)
+        # ttyd
         CONFIG_PACKAGE_ttyd=y
         CONFIG_PACKAGE_luci-app-ttyd=y
         CONFIG_PACKAGE_luci-i18n-ttyd-zh-cn=y
         EOF
         
-        # 补全配置（生成完整 .config）
+        # 补全配置（根据 .config 生成完整配置依赖）
         make defconfig
 
     - name: 下载所需依赖包 (Download dl)
@@ -131,4 +134,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: LibWrt_ZN_M2_Firmware
-        path: openwrt/bin/targets/ipq60xx/generic/*zn-m2*.*
+        # 扩大匹配范围，打包该机型目录下所有文件，防止因文件名差异漏传
+        path: openwrt/bin/targets/ipq60xx/generic/*
