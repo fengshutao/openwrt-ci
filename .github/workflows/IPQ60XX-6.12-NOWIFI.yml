@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # 支持手动在 Actions 页面触发编译
 
 env:
-  REPO_URL: https://github.com/LiBwrt/LibWrt
+  REPO_URL: https://github.com/LiBwrt/LibWrt.git
   REPO_BRANCH: master
   TZ: Asia/Shanghai
 
