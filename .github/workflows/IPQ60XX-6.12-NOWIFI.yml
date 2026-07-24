@@ -5,7 +5,7 @@ on:
 
 env:
   REPO_URL: https://github.com/LiBwrt/LibWrt.git
-  REPO_BRANCH: master
+  REPO_BRANCH: 25.12-nss
   TZ: Asia/Shanghai
 
 jobs:
